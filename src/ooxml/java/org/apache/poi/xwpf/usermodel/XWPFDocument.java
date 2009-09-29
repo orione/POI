@@ -371,5 +371,33 @@ public class XWPFDocument extends POIXMLDocument {
     public XWPFTable createTable(int rows, int cols) {
 	return new XWPFTable(this, ctDocument.getBody().addNewTbl(), rows, cols);
     }
-}
+    
+    public boolean isProtected(){
+    	
+		try {
 
+			for( POIXMLDocumentPart p :  getRelations()){
+	    		String relation = p.getPackageRelationship().getRelationshipType();
+	    		
+	    		System.out.println("yyyyyyyyyy"+relation);
+	    		
+	    		if(relation.equals(  XWPFRelation.SETTINGS.getRelation())){
+						SettingsDocument settings = SettingsDocument.Factory.parse(p.getPackagePart().getInputStream());
+	    			CTDocProtect ctDocProtect = settings.getSettings().getDocumentProtection() ;
+	    			
+	    			if (ctDocProtect == null){
+	    				return false; 
+	    			}
+	    			
+	    			return ctDocProtect.getEnforcement().equals(STOnOff.X_1);
+	    		}
+				
+	    		
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	return false;
+    }   
+}
