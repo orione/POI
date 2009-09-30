@@ -1,59 +1,62 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
 package org.apache.poi.xwpf;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.nio.channels.FileChannel;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class TestDocumentProtection extends TestCase {
 	
 	public void testShouldReadEnforcementProperties() throws Exception {
 		XWPFDocument doc = XWPFTestDataSamples.openSampleDocument("sample.docx");
-		assertFalse(doc.isEnforced());
+		assertFalse(doc.isEnforcedReadonly());
 
 		doc = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection.docx");
-		assertFalse(doc.isEnforced());
+		assertFalse(doc.isEnforcedReadonly());
 
 		doc = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
-		assertTrue(doc.isEnforced());
+		assertTrue(doc.isEnforcedReadonly());
 	}
 
 	public void testShouldModifieEnforcement() throws Exception {
-		FileInputStream in = new FileInputStream("test-data/document/documentProtection_no_protection_tag_existing.docx");
-		File tempFile = File.createTempFile("documentProtection", ".docx");
-		FileOutputStream fos = new FileOutputStream(tempFile);
-		try {
-			byte[] buf = new byte[1024];
-			int i = 0;
-			while ((i = in.read(buf)) != -1) {
-				fos.write(buf, 0, i);
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (in != null)
-				in.close();
-			if (fos != null)
-				fos.close();
-		}
-
-		FileInputStream inputStream = new FileInputStream(tempFile);
-		XWPFDocument document = new XWPFDocument(inputStream);
+		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_no_protection_tag_existing.docx");
+		assertFalse(document.isEnforcedReadonly());
 
 		document.enforceReadonly();
-		FileOutputStream stream2 = new FileOutputStream(tempFile);
-		document.write(stream2);
-		stream2.close();
 
-		assertTrue("should be enforced", document.isEnforced());
+		assertTrue(document.isEnforcedReadonly());
+	}
 
-		document.getProperties().getCoreProperties().setTitle("...");
-
+	private XWPFDocument createDocumentFromSampleFile(String fileName) throws FileNotFoundException, IOException {
+		File file = new File(fileName);
+		FileInputStream in = new FileInputStream(file);
+		byte[] bytes = new byte[(int) file.length()];
+		in.read(bytes);
+		
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+		XWPFDocument document = new XWPFDocument(inputStream);
+		return document;
 	}
 }

@@ -353,7 +353,7 @@ public class XWPFDocument extends POIXMLDocument {
 		return new XWPFTable(this, ctDocument.getBody().addNewTbl(), rows, cols);
 	}
 
-	public boolean isEnforced(){
+	public boolean isEnforcedReadonly(){
 		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
 
 		if (ctDocProtect == null) {
