@@ -29,7 +29,6 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class TestDocumentProtection extends TestCase {
 
-
 	public void testShouldReadEnforcementProperties() throws Exception {
 		XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.openSampleDocument("sample.docx");
 		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedReadonly());
@@ -49,12 +48,22 @@ public class TestDocumentProtection extends TestCase {
 
 		assertTrue(document.isEnforcedReadonly());
 	}
+	
+	public void testShouldUnsetEnforcement() throws Exception {
+		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_readonly_no_password.docx");
+		assertTrue(document.isEnforcedReadonly());
+
+		document.removeEnforcement();
+
+		assertFalse(document.isEnforcedReadonly());
+	}
 
 	private XWPFDocument createDocumentFromSampleFile(String fileName) throws FileNotFoundException, IOException {
 		File file = new File(fileName);
 		FileInputStream in = new FileInputStream(file);
 		byte[] bytes = new byte[(int) file.length()];
 		in.read(bytes);
+
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 		XWPFDocument document = new XWPFDocument(inputStream);
 		return document;
