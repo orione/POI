@@ -401,7 +401,7 @@ public class XWPFDocument extends POIXMLDocument {
 			return false;
 		}
 
-		return ctDocProtect.getEnforcement().equals(STOnOff.X_1);
+		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(STDocProtect.READ_ONLY);
 	}
 
 	public void enforceReadonly() {
@@ -438,5 +438,15 @@ public class XWPFDocument extends POIXMLDocument {
 			ctSettings.setDocumentProtection(documentProtection);
 		}
 		return documentProtection;
+	}
+
+	public boolean isEnforcedFillingForms() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void enforceFillingForms() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -36,8 +36,13 @@ public class TestDocumentProtection extends TestCase {
 		XWPFDocument documentWithoutEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection_tag_existing.docx");
 		assertFalse(documentWithoutEnforcement.isEnforcedReadonly());
 
-		XWPFDocument documentWithEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
-		assertTrue(documentWithEnforcement.isEnforcedReadonly());
+		XWPFDocument documentWithReadonlyEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
+		assertTrue(documentWithReadonlyEnforcement.isEnforcedReadonly());
+		assertFalse(documentWithReadonlyEnforcement.isEnforcedFillingForms());
+
+//		XWPFDocument documentWithFillingFormsEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_forms_no_password.docx");
+//		assertTrue(documentWithFillingFormsEnforcement.isEnforcedFillingForms());
+//		assertFalse(documentWithFillingFormsEnforcement.isEnforcedReadonly());
 	}
 
 	public void testShouldModifieEnforcement() throws Exception {
@@ -57,6 +62,15 @@ public class TestDocumentProtection extends TestCase {
 
 		assertFalse(document.isEnforcedReadonly());
 	}
+	
+//	public void testShouldEnforceForFillingForms() throws Exception {
+//		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_forms_no_password.docx");
+//		assertFalse(document.isEnforcedFillingForms());
+//
+//		document.enforceFillingForms();
+//
+//		assertTrue(document.isEnforcedFillingForms());
+//	}
 
 	private XWPFDocument createDocumentFromSampleFile(String fileName) throws FileNotFoundException, IOException {
 		File file = new File(fileName);
