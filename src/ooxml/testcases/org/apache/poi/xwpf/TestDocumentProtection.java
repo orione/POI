@@ -26,9 +26,6 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocProtect;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
 public class TestDocumentProtection extends TestCase {
 
