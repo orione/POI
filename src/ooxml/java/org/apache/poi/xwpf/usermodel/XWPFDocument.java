@@ -395,23 +395,29 @@ public class XWPFDocument extends POIXMLDocument {
     }
 
 	public boolean isEnforcedReadonly() {
-		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
+		return isEnforcedWith(STDocProtect.READ_ONLY);
+	}
 
-		if (ctDocProtect == null) {
-			return false;
-		}
-
-		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(STDocProtect.READ_ONLY);
+	public boolean isEnforcedFillingForms() {
+		return isEnforcedWith(STDocProtect.FORMS);
 	}
 
 	public void enforceReadonly() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
+		safeGetDocumentProtection().setEdit(STDocProtect.READ_ONLY);
 	}
+
+	public void enforceFillingForms() {
+		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
+		safeGetDocumentProtection().setEdit(STDocProtect.FORMS);
+	}	
 
 	public void removeEnforcement() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
 	}
 
+
+	
 	private void initSettings() {
 		try {
 			for (POIXMLDocumentPart p : getRelations()) {
@@ -440,13 +446,15 @@ public class XWPFDocument extends POIXMLDocument {
 		return documentProtection;
 	}
 
-	public boolean isEnforcedFillingForms() {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean isEnforcedWith(STDocProtect.Enum editValue ) {
+		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
+		
+		if (ctDocProtect == null) {
+			return false;
+		}
+		
+		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
 	}
 
-	public void enforceFillingForms() {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
