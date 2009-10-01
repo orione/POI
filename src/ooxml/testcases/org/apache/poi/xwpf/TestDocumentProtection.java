@@ -28,16 +28,17 @@ import junit.framework.TestCase;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class TestDocumentProtection extends TestCase {
-	
+
+
 	public void testShouldReadEnforcementProperties() throws Exception {
-		XWPFDocument doc = XWPFTestDataSamples.openSampleDocument("sample.docx");
-		assertFalse(doc.isEnforcedReadonly());
+		XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.openSampleDocument("sample.docx");
+		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedReadonly());
 
-		doc = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection.docx");
-		assertFalse(doc.isEnforcedReadonly());
+		XWPFDocument documentWithoutEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection_tag_existing.docx");
+		assertFalse(documentWithoutEnforcement.isEnforcedReadonly());
 
-		doc = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
-		assertTrue(doc.isEnforcedReadonly());
+		XWPFDocument documentWithEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
+		assertTrue(documentWithEnforcement.isEnforcedReadonly());
 	}
 
 	public void testShouldModifieEnforcement() throws Exception {
@@ -54,7 +55,6 @@ public class TestDocumentProtection extends TestCase {
 		FileInputStream in = new FileInputStream(file);
 		byte[] bytes = new byte[(int) file.length()];
 		in.read(bytes);
-		
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 		XWPFDocument document = new XWPFDocument(inputStream);
 		return document;
