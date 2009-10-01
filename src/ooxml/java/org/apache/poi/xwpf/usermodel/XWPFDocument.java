@@ -33,11 +33,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff.Enum;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import javax.management.RuntimeErrorException;
 import javax.xml.namespace.QName;
 
 /**
