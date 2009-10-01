@@ -35,6 +35,9 @@ import org.apache.poi.openxml4j.opc.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff.Enum;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import javax.management.RuntimeErrorException;
 import javax.xml.namespace.QName;
 
 /**
@@ -403,18 +406,37 @@ public class XWPFDocument extends POIXMLDocument {
 		return isEnforcedWith(STDocProtect.FORMS);
 	}
 
+	public boolean isEnforcedComments() {
+		return isEnforcedWith(STDocProtect.COMMENTS);
+	}
+	
+	public boolean isEnforcedTrackedChanges() {
+		return isEnforcedWith(STDocProtect.TRACKED_CHANGES);
+	}
+
 	public void enforceReadonly() {	
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
-		safeGetDocumentProtection().setEdit(STDocProtect.READ_ONLY);
+		setEnforcement(STDocProtect.READ_ONLY);
 	}
 
 	public void enforceFillingForms() {
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
-		safeGetDocumentProtection().setEdit(STDocProtect.FORMS);
+		setEnforcement(STDocProtect.FORMS);
 	}	
+
+	public void enforceComments() {
+		setEnforcement(STDocProtect.COMMENTS);
+	}
+
+	public void enforceTrackedChanges() {
+		setEnforcement(STDocProtect.TRACKED_CHANGES);		
+	}
 
 	public void removeEnforcement() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
+	}
+	
+	private void setEnforcement(org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect.Enum editValue) {
+		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
+		safeGetDocumentProtection().setEdit(editValue);
 	}
 	
 	private void initSettings() {
@@ -454,4 +476,5 @@ public class XWPFDocument extends POIXMLDocument {
 		
 		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
 	}
+
 }
