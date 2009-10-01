@@ -26,16 +26,20 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocProtect;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
 public class TestDocumentProtection extends TestCase {
 
 	public void testShouldReadEnforcementProperties() throws Exception {
-		XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.openSampleDocument("sample.docx");
+		XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection.docx");
 		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedReadonly());
 		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedFillingForms());
 
 		XWPFDocument documentWithoutEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection_tag_existing.docx");
 		assertFalse(documentWithoutEnforcement.isEnforcedReadonly());
+		assertFalse(documentWithoutEnforcement.isEnforcedFillingForms());
 
 		XWPFDocument documentWithReadonlyEnforcement = XWPFTestDataSamples.openSampleDocument("documentProtection_readonly_no_password.docx");
 		assertTrue(documentWithReadonlyEnforcement.isEnforcedReadonly());
@@ -46,8 +50,8 @@ public class TestDocumentProtection extends TestCase {
 		assertFalse(documentWithFillingFormsEnforcement.isEnforcedReadonly());
 	}
 
-	public void testShouldModifieEnforcement() throws Exception {
-		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_no_protection_tag_existing.docx");
+	public void testShouldEnforceForReadOnly() throws Exception {
+		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_no_protection.docx");
 		assertFalse(document.isEnforcedReadonly());
 
 		document.enforceReadonly();
@@ -65,7 +69,7 @@ public class TestDocumentProtection extends TestCase {
 	}
 	
 	public void testShouldEnforceForFillingForms() throws Exception {
-		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_no_protection_tag_existing.docx");
+		XWPFDocument document = createDocumentFromSampleFile("test-data/document/documentProtection_no_protection.docx");
 		assertFalse(document.isEnforcedFillingForms());
 
 		document.enforceFillingForms();

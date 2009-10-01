@@ -33,6 +33,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff.Enum;
 
 import javax.xml.namespace.QName;
 
@@ -50,7 +51,7 @@ import javax.xml.namespace.QName;
 public class XWPFDocument extends POIXMLDocument {
 
     private CTDocument1 ctDocument;
-	private CTSettings ctSettings;    
+    private CTSettings ctSettings;    
     protected List<XWPFComment> comments;
     protected List<XWPFHyperlink> hyperlinks;
     protected List<XWPFParagraph> paragraphs;
@@ -402,7 +403,7 @@ public class XWPFDocument extends POIXMLDocument {
 		return isEnforcedWith(STDocProtect.FORMS);
 	}
 
-	public void enforceReadonly() {
+	public void enforceReadonly() {	
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
 		safeGetDocumentProtection().setEdit(STDocProtect.READ_ONLY);
 	}
@@ -415,8 +416,6 @@ public class XWPFDocument extends POIXMLDocument {
 	public void removeEnforcement() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
 	}
-
-
 	
 	private void initSettings() {
 		try {
@@ -443,7 +442,7 @@ public class XWPFDocument extends POIXMLDocument {
 			documentProtection = CTDocProtect.Factory.newInstance();
 			ctSettings.setDocumentProtection(documentProtection);
 		}
-		return documentProtection;
+		return ctSettings.getDocumentProtection();
 	}
 
 	private boolean isEnforcedWith(STDocProtect.Enum editValue ) {
@@ -455,6 +454,4 @@ public class XWPFDocument extends POIXMLDocument {
 		
 		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
 	}
-
-
 }
