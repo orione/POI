@@ -49,7 +49,7 @@ import javax.xml.namespace.QName;
 public class XWPFDocument extends POIXMLDocument {
 
     private CTDocument1 ctDocument;
-    private CTSettings ctSettings;    
+    private XWPFSettings settings;
     protected List<XWPFComment> comments;
     protected List<XWPFHyperlink> hyperlinks;
     protected List<XWPFParagraph> paragraphs;
@@ -95,7 +95,7 @@ public class XWPFDocument extends POIXMLDocument {
             CTBody body = ctDocument.getBody();
 
             initFootnotes();
-            initSettings();
+			settings = new XWPFSettings(getRelations());
 
             // filling paragraph list
             for (CTP p : body.getPArray())	{
@@ -192,7 +192,8 @@ public class XWPFDocument extends POIXMLDocument {
 
         ctDocument = CTDocument1.Factory.newInstance();
         ctDocument.addNewBody();
-        ctSettings = CTSettings.Factory.newInstance();
+        
+        settings = new XWPFSettings();
 
         POIXMLProperties.ExtendedProperties expProps = getProperties().getExtendedProperties();
         expProps.getUnderlyingProperties().setApplication(DOCUMENT_CREATOR);
@@ -394,81 +395,39 @@ public class XWPFDocument extends POIXMLDocument {
     }
 
 	public boolean isEnforcedReadonly() {
-		return isEnforcedWith(STDocProtect.READ_ONLY);
+		return settings.isEnforcedWith(STDocProtect.READ_ONLY);
 	}
 
 	public boolean isEnforcedFillingForms() {
-		return isEnforcedWith(STDocProtect.FORMS);
+		return settings.isEnforcedWith(STDocProtect.FORMS);
 	}
 
 	public boolean isEnforcedComments() {
-		return isEnforcedWith(STDocProtect.COMMENTS);
+		return settings.isEnforcedWith(STDocProtect.COMMENTS);
 	}
 	
 	public boolean isEnforcedTrackedChanges() {
-		return isEnforcedWith(STDocProtect.TRACKED_CHANGES);
+		return settings.isEnforcedWith(STDocProtect.TRACKED_CHANGES);
 	}
 
 	public void enforceReadonly() {	
-		setEnforcement(STDocProtect.READ_ONLY);
+		settings.setEnforcementEditValue(STDocProtect.READ_ONLY);
 	}
 
 	public void enforceFillingForms() {
-		setEnforcement(STDocProtect.FORMS);
+		settings.setEnforcementEditValue(STDocProtect.FORMS);
 	}	
 
 	public void enforceComments() {
-		setEnforcement(STDocProtect.COMMENTS);
+		settings.setEnforcementEditValue(STDocProtect.COMMENTS);
 	}
 
 	public void enforceTrackedChanges() {
-		setEnforcement(STDocProtect.TRACKED_CHANGES);		
+		settings.setEnforcementEditValue(STDocProtect.TRACKED_CHANGES);		
 	}
 
 	public void removeEnforcement() {
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
+		settings.removeEnforcement();
 	}
 	
-	private void setEnforcement(org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect.Enum editValue) {
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
-		safeGetDocumentProtection().setEdit(editValue);
-	}
-	
-	private void initSettings() {
-		try {
-			for (POIXMLDocumentPart p : getRelations()) {
-				String relation = p.getPackageRelationship().getRelationshipType();
-
-				if (relation.equals(XWPFRelation.SETTINGS.getRelation())) {
-					ctSettings = SettingsDocument.Factory.parse(p.getPackagePart().getInputStream()).getSettings();
-				}
-
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		if (ctSettings == null) {
-			ctSettings = CTSettings.Factory.newInstance();
-		}
-	}
-	
-	private CTDocProtect safeGetDocumentProtection() {
-		CTDocProtect documentProtection = ctSettings.getDocumentProtection();
-		if (documentProtection == null) {
-			documentProtection = CTDocProtect.Factory.newInstance();
-			ctSettings.setDocumentProtection(documentProtection);
-		}
-		return ctSettings.getDocumentProtection();
-	}
-
-	private boolean isEnforcedWith(STDocProtect.Enum editValue ) {
-		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
-		
-		if (ctDocProtect == null) {
-			return false;
-		}
-		
-		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
-	}
 }

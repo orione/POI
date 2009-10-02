@@ -113,7 +113,6 @@ public class TestDocumentProtection extends TestCase {
 		assertFalse(document.isEnforcedReadonly());
 	}
 	
-
 	private XWPFDocument createDocumentFromSampleFile(String fileName) throws FileNotFoundException, IOException {
 		File file = new File(fileName);
 		FileInputStream in = new FileInputStream(file);
@@ -124,4 +123,5 @@ public class TestDocumentProtection extends TestCase {
 		XWPFDocument document = new XWPFDocument(inputStream);
 		return document;
 	}
+	
 }
