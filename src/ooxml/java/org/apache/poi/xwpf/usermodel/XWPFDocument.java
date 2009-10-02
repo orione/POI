@@ -471,5 +471,4 @@ public class XWPFDocument extends POIXMLDocument {
 		
 		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
 	}
-
 }
