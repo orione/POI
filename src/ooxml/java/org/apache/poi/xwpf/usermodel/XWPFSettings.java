@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -14,7 +13,6 @@ import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocProtect;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocument1;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSettings;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
@@ -27,14 +25,6 @@ public class XWPFSettings extends POIXMLDocumentPart {
 	public XWPFSettings(PackagePart part, PackageRelationship rel) throws IOException {
 		super(part, rel);
 		readFrom(part.getInputStream());
-	}
-
-	private void readFrom(InputStream inputStream) {
-		try {
-			ctSettings = SettingsDocument.Factory.parse(inputStream).getSettings();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public XWPFSettings() {
@@ -67,15 +57,7 @@ public class XWPFSettings extends POIXMLDocumentPart {
 		XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
 		xmlOptions.setSaveSyntheticDocumentElement(new QName(CTSettings.type.getName().getNamespaceURI(), "settings"));
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("http://schemas.openxmlformats.org/officeDocument/2006/math", "m");
-		map.put("urn:schemas-microsoft-com:office:office", "o");
-		map.put("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "r");
-		map.put("urn:schemas-microsoft-com:vml", "v");
-		map.put("http://schemas.openxmlformats.org/markup-compatibility/2006", "ve");
 		map.put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
-		map.put("urn:schemas-microsoft-com:office:word", "w10");
-		map.put("http://schemas.microsoft.com/office/word/2006/wordml", "wne");
-		map.put("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing", "wp");
 		xmlOptions.setSaveSuggestedPrefixes(map);
 
 		PackagePart part = getPackagePart();
@@ -91,6 +73,14 @@ public class XWPFSettings extends POIXMLDocumentPart {
 			ctSettings.setDocumentProtection(documentProtection);
 		}
 		return ctSettings.getDocumentProtection();
+	}
+	
+	private void readFrom(InputStream inputStream) {
+		try {
+			ctSettings = SettingsDocument.Factory.parse(inputStream).getSettings();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
