@@ -1086,7 +1086,8 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @return hidden - <code>false</code> if the column is visible
      */
     public boolean isColumnHidden(int columnIndex) {
-        return columnHelper.getColumn(columnIndex, false).getHidden();
+        CTCol col = columnHelper.getColumn(columnIndex, false);
+        return col != null && col.getHidden();
     }
 
     /**
@@ -2325,7 +2326,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
 
         XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
         xmlOptions.setSaveSyntheticDocumentElement(new QName(CTWorksheet.type.getName().getNamespaceURI(), "worksheet"));
-        Map map = new HashMap();
+        Map<String, String> map = new HashMap<String, String>();
         map.put(STRelationshipId.type.getName().getNamespaceURI(), "r");
         xmlOptions.setSaveSuggestedPrefixes(map);
 
