@@ -1,39 +1,39 @@
 package org.apache.poi.xwpf.usermodel;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocProtect;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSettings;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.SettingsDocument;
 
-public class XWPFSettings {
+public class XWPFSettings extends POIXMLDocumentPart {
 
 	private CTSettings ctSettings;
 
-	public XWPFSettings() {
-		ctSettings = CTSettings.Factory.newInstance();
+	public XWPFSettings(PackagePart part, PackageRelationship rel) throws IOException {
+		super(part, rel);
+		readFrom(part.getInputStream());
 	}
 
-	public XWPFSettings(List<POIXMLDocumentPart> relations) {
+	private void readFrom(InputStream inputStream) {
 		try {
-			for (POIXMLDocumentPart p : relations) {
-				String relation = p.getPackageRelationship().getRelationshipType();
-
-				if (relation.equals(XWPFRelation.SETTINGS.getRelation())) {
-					ctSettings = SettingsDocument.Factory.parse(p.getPackagePart().getInputStream()).getSettings();
-				}
-
-			}
+			ctSettings = SettingsDocument.Factory.parse(inputStream).getSettings();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
 
-		if (ctSettings == null) {
-			ctSettings = CTSettings.Factory.newInstance();
-		}
+	public XWPFSettings() {
+		super();
+		ctSettings = CTSettings.Factory.newInstance();
 	}
 
 	public boolean isEnforcedWith(STDocProtect.Enum editValue) {
@@ -53,6 +53,14 @@ public class XWPFSettings {
 
 	public void removeEnforcement() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
+	}
+
+	@Override
+	protected void commit() throws IOException {
+		PackagePart part = getPackagePart();
+		OutputStream out = part.getOutputStream();
+		ctSettings.save(out);
+		out.close();
 	}
 
 	private CTDocProtect safeGetDocumentProtection() {

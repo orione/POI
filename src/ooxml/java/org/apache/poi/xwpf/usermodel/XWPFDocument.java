@@ -95,7 +95,6 @@ public class XWPFDocument extends POIXMLDocument {
             CTBody body = ctDocument.getBody();
 
             initFootnotes();
-			settings = new XWPFSettings(getRelations());
 
             // filling paragraph list
             for (CTP p : body.getPArray())	{
@@ -117,6 +116,9 @@ public class XWPFDocument extends POIXMLDocument {
                     for(CTComment ctcomment : cmntdoc.getComments().getCommentArray()) {
                         comments.add(new XWPFComment(ctcomment));
                     }
+                }
+                else if(relation.equals(XWPFRelation.SETTINGS.getRelation())){
+                	settings = (XWPFSettings)p;
                 }
             }
 
@@ -194,6 +196,7 @@ public class XWPFDocument extends POIXMLDocument {
         ctDocument.addNewBody();
         
         settings = new XWPFSettings();
+//        getRelations().add(settings);
 
         POIXMLProperties.ExtendedProperties expProps = getProperties().getExtendedProperties();
         expProps.getUnderlyingProperties().setApplication(DOCUMENT_CREATOR);

@@ -31,7 +31,6 @@ public class TestDocumentProtection extends TestCase {
 
 	public void testShouldReadEnforcementProperties() throws Exception {
 
-
 		XWPFDocument documentWithoutDocumentProtectionTag = XWPFTestDataSamples.openSampleDocument("documentProtection_no_protection.docx");
 		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedReadonly());
 		assertFalse(documentWithoutDocumentProtectionTag.isEnforcedFillingForms());
