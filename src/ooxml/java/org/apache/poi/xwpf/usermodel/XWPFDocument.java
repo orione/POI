@@ -399,39 +399,144 @@ public class XWPFDocument extends POIXMLDocument {
     	}
     }
 
-	public boolean isEnforcedReadonly() {
+	/**
+	 * It verify in the documentProtection tag into settings.xml file <br/>
+	 * if the protection is enforced (w:enforcement="1") <br/>
+	 * and if the kind of protection is readOnly (w:edit="readOnly")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 * 
+	 * @return true if documentProtection is enforced with option readOnly
+	 */
+	public boolean isEnforcedReadonlyProtection() {
 		return settings.isEnforcedWith(STDocProtect.READ_ONLY);
 	}
 
-	public boolean isEnforcedFillingForms() {
+	/**
+	 * It verify in the documentProtection tag into settings.xml file <br/>
+	 * if the protection is enforced (w:enforcement="1") <br/>
+	 * and if the kind of protection is forms (w:edit="forms")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;forms&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 * 
+	 * @return true if documentProtection is enforced with option forms
+	 */
+	public boolean isEnforcedFillingFormsProtection() {
 		return settings.isEnforcedWith(STDocProtect.FORMS);
 	}
 
-	public boolean isEnforcedComments() {
+	/**
+	 * It verify in the documentProtection tag into settings.xml file <br/>
+	 * if the protection is enforced (w:enforcement="1") <br/>
+	 * and if the kind of protection is comments (w:edit="comments")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;comments&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 * 
+	 * @return true if documentProtection is enforced with option comments
+	 */
+	public boolean isEnforcedCommentsProtection() {
 		return settings.isEnforcedWith(STDocProtect.COMMENTS);
 	}
 	
-	public boolean isEnforcedTrackedChanges() {
+	/**
+	 * It verify in the documentProtection tag into settings.xml file <br/>
+	 * if the protection is enforced (w:enforcement="1") <br/>
+	 * and if the kind of protection is trackedChanges (w:edit="trackedChanges")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;trackedChanges&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 * 
+	 * @return true if documentProtection is enforced with option trackedChanges
+	 */
+	public boolean isEnforcedTrackedChangesProtection() {
 		return settings.isEnforcedWith(STDocProtect.TRACKED_CHANGES);
 	}
 
-	public void enforceReadonly() {	
+	/**
+	 * It enforce the readOnly protection.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+	 * and the value of edit to readOnly (w:edit="readOnly")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 */
+	public void enforceReadonlyProtection() {	
 		settings.setEnforcementEditValue(STDocProtect.READ_ONLY);
 	}
 
-	public void enforceFillingForms() {
+	/**
+	 * It enforce the Filling Forms protection.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+	 * and the value of edit to forms (w:edit="forms")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;forms&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 */
+	public void enforceFillingFormsProtection() {
 		settings.setEnforcementEditValue(STDocProtect.FORMS);
 	}	
 
-	public void enforceComments() {
+	/**
+	 * It enforce the Comments protection.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+	 * and the value of edit to comments (w:edit="comments")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;comments&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 */
+	public void enforceCommentsProtection() {
 		settings.setEnforcementEditValue(STDocProtect.COMMENTS);
 	}
 
-	public void enforceTrackedChanges() {
+	/**
+	 * It enforce the Tracked Changes protection.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+	 * and the value of edit to trackedChanges (w:edit="trackedChanges")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;trackedChanges&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 */
+	public void enforceTrackedChangesProtection() {
 		settings.setEnforcementEditValue(STDocProtect.TRACKED_CHANGES);		
 	}
 
-	public void removeEnforcement() {
+	/**
+	 * It remove protection enforcement.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "0" (w:enforcement="0") <br/>
+	 */
+	public void removeProtectionEnforcement() {
 		settings.removeEnforcement();
 	}
 	

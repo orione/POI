@@ -1,3 +1,19 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
 package org.apache.poi.xwpf.usermodel;
 
 import java.io.IOException;
@@ -32,6 +48,21 @@ public class XWPFSettings extends POIXMLDocumentPart {
 		ctSettings = CTSettings.Factory.newInstance();
 	}
 
+
+	/**
+	 * It verify in the documentProtection tag into settings.xml file <br/>
+	 * if the protection is enforced (w:enforcement="1") <br/>
+	 * and if the kind of protection equals to passed (STDocProtect.Enum editValue) <br/>
+	 * 
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 * 
+	 * @return true if documentProtection is enforced with option readOnly
+	 */
 	public boolean isEnforcedWith(STDocProtect.Enum editValue) {
 		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
 
@@ -42,11 +73,29 @@ public class XWPFSettings extends POIXMLDocumentPart {
 		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
 	}
 
+	/**
+	 * It enforce the protection with the option specified by passed editValue.<br/>
+	 * <br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+	 * and the value of edit to the passed editValue (w:edit="[passed editValue]")<br/>
+	 * <br/>
+	 * sample snippet from settings.xml
+	 * <pre>
+	 *     &lt;w:settings  ... &gt;
+	 *         &lt;w:documentProtection w:edit=&quot;[passed editValue]&quot; w:enforcement=&quot;1&quot;/&gt;
+	 * </pre>
+	 */
 	public void setEnforcementEditValue(org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect.Enum editValue) {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
 		safeGetDocumentProtection().setEdit(editValue);
 	}
 
+	/**
+	 * It remove protection enforcement.<br/>
+	 * In the documentProtection tag into settings.xml file <br/>
+	 * it sets the value of enforcement to "0" (w:enforcement="0") <br/>
+	 */
 	public void removeEnforcement() {
 		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
 	}
