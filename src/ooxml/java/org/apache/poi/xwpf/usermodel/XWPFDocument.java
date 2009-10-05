@@ -24,7 +24,9 @@ import java.util.*;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.POIXMLException;
 import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.POIXMLFactory;
 import org.apache.poi.POIXMLProperties;
+import org.apache.poi.POIXMLRelation;
 import org.apache.poi.util.PackageHelper;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.xmlbeans.XmlException;
@@ -107,7 +109,8 @@ public class XWPFDocument extends POIXMLDocument {
             }
 
             // Sort out headers and footers
-            headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
+			if (doc.getDocument().getBody().getSectPr() != null)
+				headerFooterPolicy = new XWPFHeaderFooterPolicy(this);
 
             for(POIXMLDocumentPart p : getRelations()){
                 String relation = p.getPackageRelationship().getRelationshipType();
@@ -195,8 +198,7 @@ public class XWPFDocument extends POIXMLDocument {
         ctDocument = CTDocument1.Factory.newInstance();
         ctDocument.addNewBody();
         
-        settings = new XWPFSettings();
-//        getRelations().add(settings);
+        settings =  (XWPFSettings) createRelationship(XWPFRelation.SETTINGS, XWPFFactory.getInstance());
 
         POIXMLProperties.ExtendedProperties expProps = getProperties().getExtendedProperties();
         expProps.getUnderlyingProperties().setApplication(DOCUMENT_CREATOR);
