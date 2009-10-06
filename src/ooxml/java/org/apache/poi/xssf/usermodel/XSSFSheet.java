@@ -2418,10 +2418,94 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
 		return worksheet.getSheetProtection().getSheet();
 	}
 
+	public void enableLocking() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setSheet(true);
+	}
+	
+	public void disableLocking() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setSheet(false);
+	}
+	
+	public void lockAutoFilter() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setAutoFilter(true);
+	}
+	
+	public void lockDeleteColumns() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setDeleteColumns(true);
+	}
+
+	public void lockDeleteRows() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setDeleteRows(true);		
+	}
+	
+	public void lockFormatCells() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setDeleteColumns(true);	
+	}
+
+	public void lockFormatColumns() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setFormatColumns(true);	
+	}
+
+	public void lockFormatRows() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setFormatRows(true);	
+	}
+
+	public void lockInsertColumns() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setInsertColumns(true);	
+	}
+
+	public void lockInsertHyperlinks() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setInsertHyperlinks(true);	
+	}
+
+	public void lockInsertRows() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setInsertRows(true);	
+	}
+
+	public void lockPivotTables() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setPivotTables(true);	
+	}
+
+	public void lockSort() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setSort(true);	
+	}
+
+	public void lockObjects() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setObjects(true);	
+	}
+
+	public void lockScenarios() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setScenarios(true);	
+	}
+
+	public void lockSelectLockedCells() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setSelectLockedCells(true);	
+	}
+
+	public void lockSelectUnlockedCells() {
+		createProtectionFieldIfNotPresent();
+		worksheet.getSheetProtection().setSelectUnlockedCells(true);
+	}
+
 	private void createProtectionFieldIfNotPresent() {
 		if (worksheet.getSheetProtection() == null) {
 			worksheet.setSheetProtection(CTSheetProtection.Factory.newInstance());
 		}
 	}
-
 }
