@@ -1349,8 +1349,8 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 
 	/**
 	 * Specifies a boolean value that indicates whether structure of workbook is locked. <br/>
-	 * A value true indicates the structure of the workbook is locked. Worksheets in the workbook can't be
-	 * moved, deleted, hidden, unhidden, or renamed, and new worksheets can't be inserted.<br/>
+	 * A value true indicates the structure of the workbook is locked. Worksheets in the workbook can't be moved,
+	 * deleted, hidden, unhidden, or renamed, and new worksheets can't be inserted.<br/>
 	 * A value of false indicates the structure of the workbook is not locked.<br/>
 	 * 
 	 * @return true if structure of workbook is locked
@@ -1362,7 +1362,7 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 	/**
 	 * Specifies a boolean value that indicates whether the windows that comprise the workbook are locked. <br/>
 	 * A value of true indicates the workbook windows are locked. Windows are the same size and position each time the
-	 * workbook is opened.<br/> 
+	 * workbook is opened.<br/>
 	 * A value of false indicates the workbook windows are not locked.
 	 * 
 	 * @return true if windows that comprise the workbook are locked
@@ -1371,7 +1371,17 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 		return workbookProtectionPresent() && workbook.getWorkbookProtection().getLockWindows();
 	}
 
+	/**
+	 * Specifies a boolean value that indicates whether the workbook is locked for revisions.
+	 * 
+	 * @return true if the workbook is locked for revisions.
+	 */
+	public boolean isRevisionLocked() {
+		return workbookProtectionPresent() && workbook.getWorkbookProtection().getLockRevision();
+	}
+
 	private boolean workbookProtectionPresent() {
 		return workbook.getWorkbookProtection() != null;
 	}
+
 }
