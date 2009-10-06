@@ -34,7 +34,22 @@ public class TestWorkbookProtection extends TestCase {
 		
 		workbook.lockStructure();
 		assertTrue(workbook.isStructureLocked());
+	}
+	
+	public void testShouldWriteWindowsLock() throws Exception {
+		XSSFWorkbook workbook = XSSFTestDataSamples.openSampleWorkbook("workbookProtection_not_protected.xlsx");
+		assertFalse(workbook.isWindowsLocked());
 		
+		workbook.lockWindows();
+		assertTrue(workbook.isWindowsLocked());
+	}
+	
+	public void testShouldWriteRevisionLock() throws Exception {
+		XSSFWorkbook workbook = XSSFTestDataSamples.openSampleWorkbook("workbookProtection_not_protected.xlsx");
+		assertFalse(workbook.isRevisionLocked());
+		
+		workbook.lockRevision();
+		assertTrue(workbook.isRevisionLocked());
 	}
 
 }

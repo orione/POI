@@ -1381,17 +1381,27 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 	}
 	
 	public void lockStructure() {
-		if (workbook.getWorkbookProtection() == null){
-			workbook.setWorkbookProtection(CTWorkbookProtection.Factory.newInstance());
-		}
-		
+		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockStructure(true);
 	}
 
+	public void lockWindows() {
+		createProtectionFieldIfNotPresent();
+		workbook.getWorkbookProtection().setLockWindows(true);
+	}
+	
+	public void lockRevision() {
+		createProtectionFieldIfNotPresent();
+		workbook.getWorkbookProtection().setLockRevision(true);
+	}
+	
 	private boolean workbookProtectionPresent() {
 		return workbook.getWorkbookProtection() != null;
 	}
 
-	
-
+	private void createProtectionFieldIfNotPresent() {
+		if (workbook.getWorkbookProtection() == null){
+			workbook.setWorkbookProtection(CTWorkbookProtection.Factory.newInstance());
+		}
+	}
 }
