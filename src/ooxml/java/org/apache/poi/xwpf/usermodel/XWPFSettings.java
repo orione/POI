@@ -36,100 +36,100 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.SettingsDocument;
 
 public class XWPFSettings extends POIXMLDocumentPart {
 
-	private CTSettings ctSettings;
+    private CTSettings ctSettings;
 
-	public XWPFSettings(PackagePart part, PackageRelationship rel) throws IOException {
-		super(part, rel);
-		readFrom(part.getInputStream());
-	}
+    public XWPFSettings(PackagePart part, PackageRelationship rel) throws IOException {
+        super(part, rel);
+        readFrom(part.getInputStream());
+    }
 
-	public XWPFSettings() {
-		super();
-		ctSettings = CTSettings.Factory.newInstance();
-	}
+    public XWPFSettings() {
+        super();
+        ctSettings = CTSettings.Factory.newInstance();
+    }
 
 
-	/**
-	 * It verify in the documentProtection tag into settings.xml file <br/>
-	 * if the protection is enforced (w:enforcement="1") <br/>
-	 * and if the kind of protection equals to passed (STDocProtect.Enum editValue) <br/>
-	 * 
-	 * <br/>
-	 * sample snippet from settings.xml
-	 * <pre>
-	 *     &lt;w:settings  ... &gt;
-	 *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
-	 * </pre>
-	 * 
-	 * @return true if documentProtection is enforced with option readOnly
-	 */
-	public boolean isEnforcedWith(STDocProtect.Enum editValue) {
-		CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
+    /**
+     * Verifies the documentProtection tag inside settings.xml file <br/>
+     * if the protection is enforced (w:enforcement="1") <br/>
+     * and if the kind of protection equals to passed (STDocProtect.Enum editValue) <br/>
+     * 
+     * <br/>
+     * sample snippet from settings.xml
+     * <pre>
+     *     &lt;w:settings  ... &gt;
+     *         &lt;w:documentProtection w:edit=&quot;readOnly&quot; w:enforcement=&quot;1&quot;/&gt;
+     * </pre>
+     * 
+     * @return true if documentProtection is enforced with option readOnly
+     */
+    public boolean isEnforcedWith(STDocProtect.Enum editValue) {
+        CTDocProtect ctDocProtect = ctSettings.getDocumentProtection();
 
-		if (ctDocProtect == null) {
-			return false;
-		}
+        if (ctDocProtect == null) {
+            return false;
+        }
 
-		return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
-	}
+        return ctDocProtect.getEnforcement().equals(STOnOff.X_1) && ctDocProtect.getEdit().equals(editValue);
+    }
 
-	/**
-	 * It enforce the protection with the option specified by passed editValue.<br/>
-	 * <br/>
-	 * In the documentProtection tag into settings.xml file <br/>
-	 * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
-	 * and the value of edit to the passed editValue (w:edit="[passed editValue]")<br/>
-	 * <br/>
-	 * sample snippet from settings.xml
-	 * <pre>
-	 *     &lt;w:settings  ... &gt;
-	 *         &lt;w:documentProtection w:edit=&quot;[passed editValue]&quot; w:enforcement=&quot;1&quot;/&gt;
-	 * </pre>
-	 */
-	public void setEnforcementEditValue(org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect.Enum editValue) {
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
-		safeGetDocumentProtection().setEdit(editValue);
-	}
+    /**
+     * Enforces the protection with the option specified by passed editValue.<br/>
+     * <br/>
+     * In the documentProtection tag inside settings.xml file <br/>
+     * it sets the value of enforcement to "1" (w:enforcement="1") <br/>
+     * and the value of edit to the passed editValue (w:edit="[passed editValue]")<br/>
+     * <br/>
+     * sample snippet from settings.xml
+     * <pre>
+     *     &lt;w:settings  ... &gt;
+     *         &lt;w:documentProtection w:edit=&quot;[passed editValue]&quot; w:enforcement=&quot;1&quot;/&gt;
+     * </pre>
+     */
+    public void setEnforcementEditValue(org.openxmlformats.schemas.wordprocessingml.x2006.main.STDocProtect.Enum editValue) {
+        safeGetDocumentProtection().setEnforcement(STOnOff.X_1);
+        safeGetDocumentProtection().setEdit(editValue);
+    }
 
-	/**
-	 * It remove protection enforcement.<br/>
-	 * In the documentProtection tag into settings.xml file <br/>
-	 * it sets the value of enforcement to "0" (w:enforcement="0") <br/>
-	 */
-	public void removeEnforcement() {
-		safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
-	}
+    /**
+     * Removes protection enforcement.<br/>
+     * In the documentProtection tag inside settings.xml file <br/>
+     * it sets the value of enforcement to "0" (w:enforcement="0") <br/>
+     */
+    public void removeEnforcement() {
+        safeGetDocumentProtection().setEnforcement(STOnOff.X_0);
+    }
 
-	@Override
-	protected void commit() throws IOException {
+    @Override
+    protected void commit() throws IOException {
 
-		XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-		xmlOptions.setSaveSyntheticDocumentElement(new QName(CTSettings.type.getName().getNamespaceURI(), "settings"));
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
-		xmlOptions.setSaveSuggestedPrefixes(map);
+        XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
+        xmlOptions.setSaveSyntheticDocumentElement(new QName(CTSettings.type.getName().getNamespaceURI(), "settings"));
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "w");
+        xmlOptions.setSaveSuggestedPrefixes(map);
 
-		PackagePart part = getPackagePart();
-		OutputStream out = part.getOutputStream();
-		ctSettings.save(out, xmlOptions);
-		out.close();
-	}
+        PackagePart part = getPackagePart();
+        OutputStream out = part.getOutputStream();
+        ctSettings.save(out, xmlOptions);
+        out.close();
+    }
 
-	private CTDocProtect safeGetDocumentProtection() {
-		CTDocProtect documentProtection = ctSettings.getDocumentProtection();
-		if (documentProtection == null) {
-			documentProtection = CTDocProtect.Factory.newInstance();
-			ctSettings.setDocumentProtection(documentProtection);
-		}
-		return ctSettings.getDocumentProtection();
-	}
-	
-	private void readFrom(InputStream inputStream) {
-		try {
-			ctSettings = SettingsDocument.Factory.parse(inputStream).getSettings();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private CTDocProtect safeGetDocumentProtection() {
+        CTDocProtect documentProtection = ctSettings.getDocumentProtection();
+        if (documentProtection == null) {
+            documentProtection = CTDocProtect.Factory.newInstance();
+            ctSettings.setDocumentProtection(documentProtection);
+        }
+        return ctSettings.getDocumentProtection();
+    }
+
+    private void readFrom(InputStream inputStream) {
+        try {
+            ctSettings = SettingsDocument.Factory.parse(inputStream).getSettings();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
