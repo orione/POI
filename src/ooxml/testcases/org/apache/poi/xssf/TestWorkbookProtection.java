@@ -31,47 +31,62 @@ public class TestWorkbookProtection extends TestCase {
 		assertFalse(workbook.isWindowsLocked());
 		assertFalse(workbook.isStructureLocked());
 	}
-	
+
 	public void testShouldWriteStructureLock() throws Exception {
 		XSSFWorkbook workbook = XSSFTestDataSamples.openSampleWorkbook("workbookProtection_not_protected.xlsx");
 		assertFalse(workbook.isStructureLocked());
-		
+
 		workbook.lockStructure();
+
 		assertTrue(workbook.isStructureLocked());
+
+		workbook.unLockStructure();
+
+		assertFalse(workbook.isStructureLocked());
 	}
-	
+
 	public void testShouldWriteWindowsLock() throws Exception {
 		XSSFWorkbook workbook = XSSFTestDataSamples.openSampleWorkbook("workbookProtection_not_protected.xlsx");
 		assertFalse(workbook.isWindowsLocked());
-		
+
 		workbook.lockWindows();
+
 		assertTrue(workbook.isWindowsLocked());
+
+		workbook.unLockWindows();
+
+		assertFalse(workbook.isWindowsLocked());
 	}
-	
+
 	public void testShouldWriteRevisionLock() throws Exception {
 		XSSFWorkbook workbook = XSSFTestDataSamples.openSampleWorkbook("workbookProtection_not_protected.xlsx");
 		assertFalse(workbook.isRevisionLocked());
-		
+
 		workbook.lockRevision();
+
 		assertTrue(workbook.isRevisionLocked());
+
+		workbook.unLockRevision();
+
+		assertFalse(workbook.isRevisionLocked());
 	}
-	
+
 	public void testIntegration() throws Exception {
 		XSSFWorkbook wb = new XSSFWorkbook();
 		wb.createSheet("Testing purpose sheet");
 		assertFalse(wb.isRevisionLocked());
-		
+
 		wb.lockRevision();
-		
+
 		File tempFile = File.createTempFile("workbookProtection", ".xlsx");
-        FileOutputStream out = new FileOutputStream(tempFile);
-        wb.write(out);
-        out.close();
+		FileOutputStream out = new FileOutputStream(tempFile);
+		wb.write(out);
+		out.close();
 
-        FileInputStream inputStream = new FileInputStream(tempFile);
-        XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-        inputStream.close();
+		FileInputStream inputStream = new FileInputStream(tempFile);
+		XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+		inputStream.close();
 
-        assertTrue(workbook.isRevisionLocked());
+		assertTrue(workbook.isRevisionLocked());
 	}
 }
