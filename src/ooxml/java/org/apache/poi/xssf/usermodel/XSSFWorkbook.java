@@ -1379,9 +1379,19 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 	public boolean isRevisionLocked() {
 		return workbookProtectionPresent() && workbook.getWorkbookProtection().getLockRevision();
 	}
+	
+	public void lockStructure() {
+		if (workbook.getWorkbookProtection() == null){
+			workbook.setWorkbookProtection(CTWorkbookProtection.Factory.newInstance());
+		}
+		
+		workbook.getWorkbookProtection().setLockStructure(true);
+	}
 
 	private boolean workbookProtectionPresent() {
 		return workbook.getWorkbookProtection() != null;
 	}
+
+	
 
 }
