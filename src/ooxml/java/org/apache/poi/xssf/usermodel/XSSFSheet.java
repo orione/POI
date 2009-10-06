@@ -78,6 +78,7 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheet;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetData;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetFormatPr;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetPr;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetProtection;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetView;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetViews;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTWorksheet;
@@ -857,7 +858,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
      * @return true => protection enabled; false => protection disabled
      */
     public boolean getProtect() {
-        return worksheet.isSetSheetProtection() && worksheet.getSheetProtection().getSheet();
+        return worksheet.isSetSheetProtection() && sheetProtectionEnabled();
     }
 
     /**
@@ -2332,4 +2333,95 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet {
 
         worksheet.save(out, xmlOptions);
     }
+
+	public boolean isAutoFilterLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getAutoFilter();
+	}
+
+	public boolean isDeleteColumnsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getDeleteColumns();
+	}
+
+	public boolean isDeleteRowsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getDeleteRows();
+	}
+
+	public boolean isFormatCellsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getFormatCells();
+	}
+
+	public boolean isFormatColumnsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getFormatColumns();
+	}
+
+	public boolean isFormatRowsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getFormatRows();
+	}
+
+	public boolean isInsertColumnsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getInsertColumns();
+	}
+
+	public boolean isInsertHyperlinksLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getInsertHyperlinks();
+	}
+
+	public boolean isInsertRowsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getInsertRows();
+	}
+
+	public boolean isPivotTablesLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getPivotTables();
+	}
+
+	public boolean isSortLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getSort();
+	}
+
+	public boolean isObjectsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getObjects();
+	}
+
+	public boolean isScenariosLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getScenarios();
+	}
+
+	public boolean isSelectLockedCellsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getSelectLockedCells();
+	}
+
+	public boolean isSelectUnlockedCellsLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getSelectUnlockedCells();
+	}
+
+	public boolean isSheetLocked() {
+		createProtectionFieldIfNotPresent();
+		return sheetProtectionEnabled() && worksheet.getSheetProtection().getSheet();
+	}
+
+	private boolean sheetProtectionEnabled() {
+		return worksheet.getSheetProtection().getSheet();
+	}
+
+	private void createProtectionFieldIfNotPresent() {
+		if (worksheet.getSheetProtection() == null) {
+			worksheet.setSheetProtection(CTSheetProtection.Factory.newInstance());
+		}
+	}
+
 }

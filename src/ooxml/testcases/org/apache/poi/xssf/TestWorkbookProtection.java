@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import junit.framework.TestCase;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class TestWorkbookProtection extends TestCase {
 
@@ -59,6 +58,7 @@ public class TestWorkbookProtection extends TestCase {
 	
 	public void testIntegration() throws Exception {
 		XSSFWorkbook wb = new XSSFWorkbook();
+		wb.createSheet("Testing purpose sheet");
 		assertFalse(wb.isRevisionLocked());
 		
 		wb.lockRevision();
