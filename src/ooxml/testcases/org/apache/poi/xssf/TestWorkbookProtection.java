@@ -1,6 +1,11 @@
 package org.apache.poi.xssf;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import junit.framework.TestCase;
 
@@ -51,5 +56,22 @@ public class TestWorkbookProtection extends TestCase {
 		workbook.lockRevision();
 		assertTrue(workbook.isRevisionLocked());
 	}
+	
+	public void testIntegration() throws Exception {
+		XSSFWorkbook wb = new XSSFWorkbook();
+		assertFalse(wb.isRevisionLocked());
+		
+		wb.lockRevision();
+		
+		File tempFile = File.createTempFile("workbookProtection", ".xlsx");
+        FileOutputStream out = new FileOutputStream(tempFile);
+        wb.write(out);
+        out.close();
 
+        FileInputStream inputStream = new FileInputStream(tempFile);
+        XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        inputStream.close();
+
+        assertTrue(workbook.isRevisionLocked());
+	}
 }
