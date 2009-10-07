@@ -75,7 +75,6 @@ public final class TestXSSFWorkbook extends BaseTestWorkbook {
 		OutputStream out = new FileOutputStream(file);
 		workbook.write(out);
 		out.close();
-		System.out.println(file);
 
 		// Check the package contains what we'd expect it to
 		OPCPackage pkg = OPCPackage.open(file.toString());

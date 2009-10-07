@@ -1380,31 +1380,49 @@ public class XSSFWorkbook extends POIXMLDocument implements Workbook, Iterable<X
 		return workbookProtectionPresent() && workbook.getWorkbookProtection().getLockRevision();
 	}
 	
+	/**
+	 * Locks the structure of workbook.
+	 */
 	public void lockStructure() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockStructure(true);
 	}
 	
+	/**
+	 * Unlocks the structure of workbook.
+	 */
 	public void unLockStructure() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockStructure(false);
 	}
 
+	/**
+	 * Locks the windows that comprise the workbook. 
+	 */
 	public void lockWindows() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockWindows(true);
 	}
 	
+	/**
+	 * Unlocks the windows that comprise the workbook. 
+	 */
 	public void unLockWindows() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockWindows(false);
 	}
 	
+	/**
+	 * Locks the workbook for revisions.
+	 */
 	public void lockRevision() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockRevision(true);
 	}
-	
+
+	/**
+	 * Unlocks the workbook for revisions.
+	 */
 	public void unLockRevision() {
 		createProtectionFieldIfNotPresent();
 		workbook.getWorkbookProtection().setLockRevision(false);
